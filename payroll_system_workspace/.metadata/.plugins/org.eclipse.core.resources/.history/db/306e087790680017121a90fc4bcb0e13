@@ -1,0 +1,81 @@
+var LeaveModal = (function($){
+	var _table = null
+	var _modalBtn= null
+	var _dataTable = null;
+	var _this = this;
+	
+	var _init = function(table, modalBtn) {
+		_table = $(table);
+		_modalBtn = $(modalBtn);
+		_dataTable = _table.DataTable({responsive:true});
+	}
+	
+	var _bindEvent =function() {
+		_modalBtn.on("click",_clickEvent);
+	}
+	
+	var _getDataTable = function() {
+		return _dataTable;
+	}
+	
+	var _getModalBtn = function() {
+		return _modalBtn;
+	}
+	
+	var _getTable = function() {
+		return _table;
+	}
+	
+	var _reRenderTable = function() {
+		$("#leave-modal").find("tr td input.payroll-textfield").css("width","70px")
+		$("#leave-modal").find(".modal-sm").css("width","1150px");
+		
+		$("#leave-table-id").css("width","100%");
+	}
+	var _clickEvent = function(event){
+		var id = PayrollWeekDetails.getEmployeeId(event.target);
+		var from = PayrollWeekDetails.getPayrollDateFrom();
+		var to = PayrollWeekDetails.getPayrollDateTo();
+		
+		if (PayrollWeekDetails.isPayrollWeekHasValue(_modalBtn,from, to, event)) {
+			if ($.fn.DataTable.isDataTable("#leave-table-id")) {
+				_dataTable.clear();
+				
+				$.ajax({
+					type: "GET",
+					url: "/employee-ws/employee/leaves/" + id+ "/" + from + "/" + to + ".json",
+					success: function(record) {
+						
+						$("#leave-modal .modal-content .modal-body span#span-employee-name").text("");
+						
+						if (record.length > 0) {
+							$("#leave-modal .modal-content .modal-body span#span-employee-name").append("Name: " + record[0].firstName + " " + record[0].lastName + "<br/>");
+							
+							$.each(record, function(index){
+								var obj = record[index];
+								
+								_dataTable.row.add([
+									  obj.renderedDate,
+									  obj.renderedHour,
+									  obj.leaveType,
+									  obj.status    
+								]).draw();
+							})
+						} else {
+							$("#leave-modal .modal-content .modal-body span#span-employee-name").append("NO FOUND RECORD<br/>");
+							_dataTable.clear().draw();
+							
+						}
+						
+						_reRenderTable();
+					}
+				})
+			}
+		}
+	}
+	
+	return {
+		init : _init,
+		bindEvent : _bindEvent
+	}
+})(jQuery);

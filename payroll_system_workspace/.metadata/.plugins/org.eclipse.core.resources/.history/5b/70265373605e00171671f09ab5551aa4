@@ -1,0 +1,145 @@
+var counter = -1;
+dtrTable = $("#dtr-table-id").DataTable({
+	responsive : true,
+	columns : [
+				{ data: 'timeIn',
+				  render: function(data, type, row){
+				  		counter++;
+				  		return "<input type='text' class='form-control date' id='datetimepicker" + counter + "1' value='" + data + "'/> " +
+   							"<script>" +
+   								"$('#datetimepicker" + counter + "1').datetimepicker({" + 
+  										"format:  'YYYY-MM-DD HH:mm'," +
+										"widgetPositioning: {" +
+											"horizontal: 'auto'," +
+										    "vertical: 'auto' " +
+										"}," +
+										"toolbarPlacement: 'bottom'," +
+										"showTodayButton: true," +
+										"showClear: true," +
+										"stepping: 1" +
+			        				"});" +
+				        					
+		        					"$('#datetimepicker" + counter + "1').on('dp.show', function(){" +
+		        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+		        							"find('table thead > tr > th').css('padding-right','0');" +
+		        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+		        							"find('table thead > tr > th').css('padding-left','0');" +
+		        					"});" +
+				           		"<\/script>";
+				  }
+				},
+				{ data: 'timeOut',
+				  render: function(data, type, row){
+					    counter++
+				  		return "<input type='text' class='form-control date' id='datetimepicker" + counter + "2' value='" + data + "'/> " +
+   							"<script>" +
+   								"$('#datetimepicker" + counter + "2').datetimepicker({" + 
+  										"format:  'YYYY-MM-DD HH:mm'," +
+										"widgetPositioning: {" +
+											"horizontal: 'auto'," +
+										    "vertical: 'auto' " +
+										"}," +
+										"toolbarPlacement: 'bottom'," +
+										"showTodayButton: true," +
+										"showClear: true," +
+										"stepping: 1" +
+			        				"});" +
+			        					
+		        					"$('#datetimepicker" + counter + "2').on('dp.show', function(){" +
+		        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+		        							"find('table thead > tr > th').css('padding-right','0');" +
+		        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+		        							"find('table thead > tr > th').css('padding-left','0');" +
+		        					"});" +
+				           		"<\/script>";
+				  }
+				},
+				{	data :'late',
+				    render : function(data, type, row) { 
+				    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+				    	}
+				},
+				{	data :'underTime',
+				    render : function(data, type, row) { 
+				    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>" 
+				    	}
+				},
+				{	data :'leave',
+				    render : function(data, type, row) { 
+				    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+				    	}
+				},
+				{	data :'overTime',
+				    render : function(data, type, row) { 
+				    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+				    	}
+				}
+			]
+})
+$(".dtr-event").on("click", function(event){
+	var from = $("#date-time-picker-input-from").val().replace(/:|-|\s/g , "");
+	var to = $("#date-time-picker-input-to").val().replace(/:|-|\s/g , "");
+	var id = $(this).parent().parent().find("td:first").text();
+	var datum = [];
+	
+	console.log("from " + from)
+	console.log("to " + to)
+	
+	if (from == "" || to == "") {
+		event.stopPropagation();
+		
+		$("#message-alert").append("<div class=\"alert alert-warning alert-dismissable\">" +
+			"<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>" +
+			"<strong>Please fill up the Payroll Week!</strong>.</div>");
+	}
+	
+    if ($.fn.DataTable.isDataTable("#dtr-table-id")) {
+    	dtrTable.clear();
+		
+		$.ajax({
+			type : "GET",
+			url: "/employee-ws/employee/timerecords/" + id+ "/" + from + "/" + to + ".json",
+			success : function(record){
+				$.each(record, function(key, value){
+					
+					if (key === 'employeeTimeRecordList') {
+						
+						$.each(value,function(index){
+							var obj = value[index];
+							
+							console.log(obj.timeIn + " " + obj.timeOut)
+							var rec = {}
+							rec.timeIn = obj.timeIn;
+							rec.timeOut = obj.timeOut;
+							rec.late = 4;
+							rec.leave = 4;
+							rec.underTime = 4;
+							rec.overTime = 4;
+							
+							dtrTable.row.add([
+							                  obj.timeIn,
+							                  obj.timeOut,
+							                  4,
+							                  4,
+							                  4,
+							                  4
+							              ]).draw();
+						})
+					}	
+				});
+				
+				
+			    $("#dtr-modal").find("tr td input.payroll-textfield").css("width","70px")
+				$("#dtr-modal").find(".modal-sm").css("width","1150px");
+				
+				$("#dtr-table-id").css("width","100%");
+				
+				dtrTable.columns.adjust().draw();
+			}
+		})
+	} else {
+		var datum = [];
+		var counter = -1;
+		var id = $(this).parent().parent().find("td:first").text();
+	}
+})

@@ -1,0 +1,1 @@
+{"taxYear":2018,"taxDistribution":"MONTHLY","taxStatus":"SME","taxStatusPercentage":[{"percent":0.2,"taxableValue":25000.0,"taxDue":0.0},{"percent":0.25,"taxableValue":37500.0,"taxDue":2500.0},{"percent":0.3,"taxableValue":70833.33,"taxDue":10833.0},{"percent":0.32,"taxableValue":170833.33,"taxDue":40833.33},{"percent":0.35,"taxableValue":420833.34,"taxDue":120833.33}]}

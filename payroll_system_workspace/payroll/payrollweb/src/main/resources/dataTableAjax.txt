@@ -1,0 +1,109 @@
+$.ajax({
+			type : "GET",
+			url: "/employee-ws/employee/timerecords/" + id+ "/" + from + "/" + to + ".json",
+			success : function(record){
+				$.each(record, function(key, value){
+					
+					if (key === 'employeeTimeRecordList') {
+						
+						$.each(value,function(index){
+							var obj = value[index];
+							
+							console.log(obj.timeIn + " " + obj.timeOut)
+							var rec = {}
+							rec.timeIn = obj.timeIn;
+							rec.timeOut = obj.timeOut;
+							rec.late = 4;
+							rec.leave = 4;
+							rec.underTime = 4;
+							rec.overTime = 4;
+							
+							datum.push(rec)
+						})
+					}	
+				});
+				
+				$(dtrElement).DataTable({
+					responsive:true,
+					data : datum,
+					columns : [
+						{ data: 'timeIn',
+						  render: function(data, type, row){
+						  		counter++;
+						  		return "<input type='text' class='form-control date' id='datetimepicker" + counter + "1' value='" + data + "'/> " +
+	        							"<script>" +
+	        								"$('#datetimepicker" + counter + "1').datetimepicker({" + 
+	       										"format:  'YYYY-MM-DD HH:mm'," +
+												"widgetPositioning: {" +
+													"horizontal: 'auto'," +
+												    "vertical: 'auto' " +
+												"}," +
+												"toolbarPlacement: 'bottom'," +
+												"showTodayButton: true," +
+												"showClear: true," +
+												"stepping: 1" +
+					        				"});" +
+						        					
+				        					"$('#datetimepicker" + counter + "1').on('dp.show', function(){" +
+				        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+				        							"find('table thead > tr > th').css('padding-right','0');" +
+				        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+				        							"find('table thead > tr > th').css('padding-left','0');" +
+				        					"});" +
+						           		"<\/script>";
+						  }
+						},
+						{ data: 'timeOut',
+						  render: function(data, type, row){
+						  		return "<input type='text' class='form-control date' id='datetimepicker" + counter + "2' value='" + data + "'/> " +
+	        							"<script>" +
+	        								"$('#datetimepicker" + counter + "2').datetimepicker({" + 
+	       										"format:  'YYYY-MM-DD HH:mm'," +
+												"widgetPositioning: {" +
+													"horizontal: 'auto'," +
+												    "vertical: 'auto' " +
+												"}," +
+												"toolbarPlacement: 'bottom'," +
+												"showTodayButton: true," +
+												"showClear: true," +
+												"stepping: 1" +
+					        				"});" +
+					        					
+				        					"$('#datetimepicker" + counter + "2').on('dp.show', function(){" +
+				        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+				        							"find('table thead > tr > th').css('padding-right','0');" +
+				        						"$(this).parent().find('.bootstrap-datetimepicker-widget')." +
+				        							"find('table thead > tr > th').css('padding-left','0');" +
+				        					"});" +
+						           		"<\/script>";
+						  }
+						},
+						{	data :'late',
+						    render : function(data, type, row) { 
+						    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+						    	}
+						},
+						{	data :'underTime',
+						    render : function(data, type, row) { 
+						    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>" 
+						    	}
+						},
+						{	data :'leave',
+						    render : function(data, type, row) { 
+						    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+						    	}
+						},
+						{	data :'overTime',
+						    render : function(data, type, row) { 
+						    		return "<input type='text' class='payroll-textfield form-control' value='" + data + "'/>"
+						    	}
+						}
+					]
+				});
+			
+			    $("#dtr-modal").find("tr td input.payroll-textfield").css("width","70px")
+				$("#dtr-modal").find(".modal-sm").css("width","1150px");
+				
+				$("#dtr-table-id").css("width","100%");
+			}
+		})

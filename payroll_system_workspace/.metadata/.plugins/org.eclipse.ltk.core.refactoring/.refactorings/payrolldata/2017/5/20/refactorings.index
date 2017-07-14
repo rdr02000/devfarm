@@ -1,0 +1,5 @@
+1495288622678	Delete element
+1495292951331	Rename package 'com.teradyne.payroll.data.dao'
+1495292996510	Rename package 'com.teradyne.payroll.data.dao.test'
+1495322558463	Rename type 'IGenericDAO'
+1495323146826	Rename type 'LeaveDAOImpl'

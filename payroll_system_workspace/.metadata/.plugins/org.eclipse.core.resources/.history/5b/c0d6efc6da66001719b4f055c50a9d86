@@ -1,0 +1,19 @@
+package com.juve.payroll.util;
+
+import java.util.Calendar;
+import java.util.Comparator;
+
+import com.juve.payroll.model.TimeRecord;
+
+public class DateIgnoringTimeComparator implements Comparator<TimeRecord> {
+	
+	public int compare(TimeRecord timeRecord1, TimeRecord timeRecord2) {
+	    Calendar c1 = Calendar.getInstance();
+	    c1.set(tim, value);
+		if (c1.get(Calendar.YEAR) != c2.get(Calendar.YEAR)) 
+	        return c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR);
+	    if (c1.get(Calendar.MONTH) != c2.get(Calendar.MONTH)) 
+	        return c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
+	    return c1.get(Calendar.DAY_OF_MONTH) - c2.get(Calendar.DAY_OF_MONTH);
+	}
+}

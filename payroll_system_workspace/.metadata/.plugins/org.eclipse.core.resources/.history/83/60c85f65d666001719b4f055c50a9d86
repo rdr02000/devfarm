@@ -1,0 +1,5 @@
+package com.juve.payroll.util;
+
+public class DateIgnoringTimeComparator {
+
+}

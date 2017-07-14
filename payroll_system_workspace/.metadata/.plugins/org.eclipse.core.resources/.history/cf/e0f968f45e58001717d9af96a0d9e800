@@ -1,0 +1,534 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Payroll Worklist</h1>
+    </div>
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                ID Number: 743482 <br/>
+                Company Name : Ramel Rosales Holding
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>Employee Number</th>
+                            <th>Employee Name</th>
+                            <th>Position</th>
+                            <th>Address</th>
+                            <th>Contact Number</th>
+                            <th>Email Address</th>
+                            <th>Edit Payroll</th>
+                         
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr class="even gradeC">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">DTR</button></td>
+                        </tr>
+                        <tr class="odd gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="even gradeA">
+                              <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="odd gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="even gradeA">
+                              <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                              <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                           <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                             <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                           <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        <tr class="gradeA">
+                            <td>12345</td>
+                            <td>Ramel Rosales</td>
+                            <td>Janitor</td>
+                            <td>211 M. Revilles St., Poblacion,Talibon,Bohol,Philippines</td>
+                            <td>(+63)9267339291</td>
+                            <td>rosalesramel@xyzholding.com</td>
+                            <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="classInfo" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        		<h4 class="modal-title" id="classModalLabel">
+        			Payroll Detail
+        		</h4>
+      		</div>
+      		<div class="modal-body">
+      			<div class="container">
+	      			<div class="row col-sm-12 ">
+	      				<div class="col-lg-1"><b>FROM</b></div>
+	     				<div class='col-lg-4'>
+		            		<div class="form-group">
+		                		<div class='input-group date' id='datetimepickerx'>
+		                    		<input type='text' class="form-control" />
+		                    		<span class="input-group-addon">
+		                        		<span class="glyphicon glyphicon-calendar"></span>
+		                    		</span>
+		                		</div>
+		            		</div>
+		        		</div>
+		        		<script>
+		        			$('#datetimepickerx').datetimepicker();
+	           			</script>
+		      		</div>
+	      			<div class="row col-sm-12 ">
+		      			<div class="col-lg-1"><b>TO</b></div>
+						<div class='col-lg-4'>
+						 	<div class="form-group">
+						     	<div class='input-group date' id='datetimepickery'>
+						         	<input type='text' class="form-control" />
+						             <span class="input-group-addon">
+						             	<span class="glyphicon glyphicon-calendar"></span>
+						            	</span>
+						         </div>
+						     </div>
+						 </div>
+						 <script>$('#datetimepickery').datetimepicker();</script>
+	      			</div>
+			      	<div class="row col-sm-12 ">
+			      		<h4 class="modal-title">Daily Time Records</h4>
+			      	</div>
+	      			<div class="row col-sm-12 " >
+      				<table id="example" class="table table-striped table-bordered" style="overflow-y: visible;">
+        				<thead>
+            				<tr>
+                				<th>Time In</th>
+                				<th>Time Out</th>
+               					<th>Late</th>
+                				<th>Undertime</th>
+                				<th>Leave</th>
+                				<th>Overtime</th>
+                				
+            				</tr>
+        				</thead>
+        				<tfoot>
+            				<tr>
+                				<th>Time In</th>
+                				<th>Time Out</th>
+               					<th>Late</th>
+                				<th>Undertime</th>
+                				<th>Leave</th>
+                				<th>Overtime</th>
+                				
+            				</tr>
+        				</tfoot>
+					        <tbody>
+					            <tr style="position:relative; overflow-y: visible;">
+					                <td width="40%" style="position:relative; overflow-y: visible;">
+					                	<div class="row-fluid">
+					                	<!-- <div class="form-group"> -->
+					                			<input type='text' class="form-control" id='datetimepicker1'  />
+					                    		 
+					                		<script>
+					        					$('#datetimepicker1').datetimepicker({
+					        					//inline: true,
+					        					    
+					        						format: 'YYYY-MM-DD HH:mm',
+												    widgetPositioning: {
+												      horizontal: 'auto',
+												      vertical: 'auto',
+												      overflow:'visible'
+												    },
+												    showClose: true,
+												    toolbarPlacement: 'bottom',
+												    showTodayButton: true,
+												    showClear: true,
+												    stepping: 15,
+												    
+					        					});
+					           				</script>
+						            	</div>
+						            	<!--  </div> -->
+					           		</td>
+					                <td width ="20%" style="overflow-y: visible;">
+					                	<div class="row-fluid">
+					                	<div class="form-group">
+					                		<div class='input-group date' id='datetimepicker2'>
+					                    		<input type='text' class="form-control" />
+					                    		<span class="input-group-addon">
+					                        		<span class="glyphicon glyphicon-calendar"></span>
+					                    		</span>
+					                		</div>
+						            	</div>
+						            	</div>
+						            	<script>
+					        					$('#datetimepicker2').datetimepicker();
+					           				</script>
+					                </td>
+					                <td><input type='text' class="payroll-textfield form-control"/></td>
+					                <td><input type='text' class="payroll-textfield form-control"/></td>
+					                <td><input type='text' class="payroll-textfield form-control"/></td>
+					                <td><input type='text' class="payroll-textfield form-control"/></td>
+					            </tr>
+					        </tbody>
+    					</table>
+      			</div>
+	      		</div>	
+				<div class="modal-footer">
+	     			<button type="button" class="btn btn-primary" data-dismiss="modal">
+	      				Close
+	     			</button>
+	   		 	</div>
+  			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+   	
+   	//$("#myModal").find(".modal-lg").css("width","1200px");
+	//$("#myModal").find("tr td input.payroll-textfield").css("width","100px")
+			
+    
+    $('#myModal').on('shown.bs.modal', function() {
+    	var dataTable= $('#example').DataTable({	           
+    		responsive: true
+	        });
+        //dataTable.columns.adjust();
+	});
+ </script>

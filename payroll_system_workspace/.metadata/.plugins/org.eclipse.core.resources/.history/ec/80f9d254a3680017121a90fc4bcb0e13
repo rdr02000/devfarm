@@ -1,0 +1,173 @@
+package com.juve.payroll.util;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.List;
+
+import com.juve.payroll.model.Client;
+import com.juve.payroll.model.Employee;
+import com.juve.payroll.model.EmployeeShift;
+import com.juve.payroll.model.ScheduleShift;
+import com.juve.payroll.model.TimeRecord;
+import com.juve.payroll.model.WorkdayShift;
+
+public class TimeRecordUtilityService {
+	
+	//@SuppressWarnings("deprecation")
+	public static long getLate(Employee employee, TimeRecord timeRecord) {
+		int hour = 0;
+		int min = 0;
+		int sec = 0;
+		long lateTotal = 0;
+		
+		String shiftTime = employee.getEmployeeShift().getScheduleShift().getShiftRule();
+		Calendar ruleTimeIn = Calendar.getInstance();
+		
+		Calendar timeIn = Calendar.getInstance();
+		timeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
+		///timeIn.set(Calendar.HOUR_OF_DAY, timeRecord.getTimeIn().getHours());
+		//timeIn.set(Calendar.MINUTE, timeRecord.getTimeIn().getMinutes());
+		//timeIn.set(Calendar.SECOND, timeRecord.getTimeIn().getSeconds());
+		
+		if (shiftTime.contains("-")) {
+			String[] timeStr = shiftTime.split("-");
+			hour = Integer.parseInt(timeStr[1].substring(0, 2));
+			min  = Integer.parseInt(timeStr[1].substring(2, 4));
+			sec  = Integer.parseInt(timeStr[1].substring(4, 6));
+		} else if (shiftTime.contains("|")) {
+			String[] timeStr = shiftTime.split("\\|");
+			
+			if (timeIn.get(Calendar.HOUR_OF_DAY) < (Integer.parseInt(timeStr[0].substring(0,2)) + 4)) {
+				hour = Integer.parseInt(timeStr[0].substring(0,2));
+				min  = Integer.parseInt(timeStr[0].substring(2,4));
+				sec  = Integer.parseInt(timeStr[0].substring(4,6));
+			} else {
+				hour = Integer.parseInt(timeStr[1].substring(0,2));
+				min  = Integer.parseInt(timeStr[1].substring(2,4));
+				sec  = Integer.parseInt(timeStr[1].substring(4,6));
+			}
+		} else {
+			hour = Integer.parseInt(shiftTime.substring(0,2));
+			min  = Integer.parseInt(shiftTime.substring(2,4));
+			sec  = Integer.parseInt(shiftTime.substring(4,6));
+		}
+	
+		ruleTimeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
+		ruleTimeIn.set(Calendar.HOUR_OF_DAY, hour);
+		ruleTimeIn.set(Calendar.MINUTE, min);
+		ruleTimeIn.set(Calendar.SECOND, sec);
+		
+		lateTotal = (timeRecord.getTimeIn().getTime() - ruleTimeIn.getTime().getTime());
+		
+		if (lateTotal < 0) {
+			return 0;
+		}
+
+		return (lateTotal/1000)/60;
+	} 
+	
+	public static long getUnderTime(Employee employee, TimeRecord timeRecord) {
+		int min = 0;
+		int sec = 0;
+		int i = 0;
+		long underTime = 0;
+		
+		String shiftTime = employee.getEmployeeShift().getScheduleShift().getShiftRule();
+		
+		Calendar timeIn = Calendar.getInstance();
+		timeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
+		
+		Calendar timeOut = Calendar.getInstance();
+		timeOut.setTime(new Date(timeRecord.getTimeOut().getTime()));
+		
+		Calendar ruledTimeOut = Calendar.getInstance();
+		ruledTimeOut.setTime(new Date(timeRecord.getTimeIn().getTime()));
+		
+		if (shiftTime.contains("-")) {
+			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 9);
+			ruledTimeOut.set(Calendar.MINUTE,timeIn.get(Calendar.MINUTE));
+			ruledTimeOut.set(Calendar.SECOND, timeIn.get(Calendar.SECOND));
+		} else if (shiftTime.contains("|") && i == 0) {
+			String[] timeStr = shiftTime.split("\\|");
+			min  = Integer.parseInt(timeStr[0].substring(2,4));
+			sec  = Integer.parseInt(timeStr[0].substring(4,6));
+			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 4);
+			ruledTimeOut.set(Calendar.MINUTE, min);
+			ruledTimeOut.set(Calendar.SECOND, sec);
+			i++;
+		} else if (shiftTime.contains("|") && i == 1) {
+			String[] timeStr = shiftTime.split("\\|");
+			min  = Integer.parseInt(timeStr[1].substring(2,4));
+			sec  = Integer.parseInt(timeStr[1].substring(4,6));
+			
+			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 4);
+			ruledTimeOut.set(Calendar.MINUTE, min);
+			ruledTimeOut.set(Calendar.SECOND, sec);
+		} else {
+			min  = Integer.parseInt(shiftTime.substring(2,4));
+			sec  = Integer.parseInt(shiftTime.substring(4,6));
+			
+			ruledTimeOut.set(Calendar.HOUR_OF_DAY,  timeIn.get(Calendar.HOUR_OF_DAY) + 9);
+			ruledTimeOut.set(Calendar.MINUTE, min);
+			ruledTimeOut.set(Calendar.SECOND, sec);
+		}
+		
+		underTime = (ruledTimeOut.getTime().getTime() - timeOut.getTime().getTime());
+		
+		if (underTime < 0) {
+			return 0;
+		}
+		
+		return (underTime/1000)/60;
+	}
+	
+	public static long getUnderTime(Employee employee, List<TimeRecord> timeRecordList ) {
+		long underTime = 0;
+		
+		for (TimeRecord timeRecord : timeRecordList) {
+			underTime += TimeRecordUtilityService.getUnderTime(employee, timeRecord);	
+		}
+		
+		return underTime;
+	}
+
+	public static long getLate(Employee employee, List<TimeRecord> timeRecordList) {
+		long lateTotal = 0;
+		
+		for (TimeRecord timeRecord : timeRecordList) {
+			lateTotal += TimeRecordUtilityService.getLate(employee, timeRecord);
+		}
+		
+		return lateTotal;
+	}
+
+	public static int getAbsences(Employee employee, List<TimeRecord> timeRecords) {
+		EmployeeShift shift = employee.getEmployeeShift();
+		WorkdayShift workDayShift = shift.getWorkdayShiftBean();
+		ScheduleShift scheduleShift = shift.getScheduleShift();
+		Client client = employee.getClient();
+		List<String> workDays = Arrays.asList(workDayShift.getDailyShiftSched().split("-"));
+		int requiredTimeInNumberOfLogin = 0;
+		
+		if ("weekly".equals(client.getPayrollOccurence())) {
+			requiredTimeInNumberOfLogin = workDays.size();
+		} else if ("semimonthly".equals(client.getPayrollOccurence())) {
+			requiredTimeInNumberOfLogin = 2*workDays.size();
+		} else if ("monthly".equals(client.getPayrollOccurence())) {
+			requiredTimeInNumberOfLogin = 4*workDays.size();	
+		}
+		
+		if (scheduleShift.getShiftRule().contains("|")) {
+			requiredTimeInNumberOfLogin = 2*requiredTimeInNumberOfLogin;
+		}
+		
+		int missedTimeIn = requiredTimeInNumberOfLogin - timeRecords.size();
+		
+		if (scheduleShift.getShiftRule().contains("|")) {
+			missedTimeIn /= 2;
+		}
+		
+		return missedTimeIn;
+	} 
+}

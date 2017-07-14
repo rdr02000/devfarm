@@ -1,0 +1,55 @@
+package payrollJPA;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the workday_shift database table.
+ * 
+ */
+@Entity
+@Table(name="workday_shift")
+@NamedQuery(name="WorkdayShift.findAll", query="SELECT w FROM WorkdayShift w")
+public class WorkdayShift implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
+
+	@Column(name="daily_shift_sched")
+	private String dailyShiftSched;
+
+	//bi-directional one-to-one association to EmployeeShift
+	@OneToOne(mappedBy="workdayShiftBean")
+	private EmployeeShift employeeShift;
+
+	public WorkdayShift() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDailyShiftSched() {
+		return this.dailyShiftSched;
+	}
+
+	public void setDailyShiftSched(String dailyShiftSched) {
+		this.dailyShiftSched = dailyShiftSched;
+	}
+
+	public EmployeeShift getEmployeeShift() {
+		return this.employeeShift;
+	}
+
+	public void setEmployeeShift(EmployeeShift employeeShift) {
+		this.employeeShift = employeeShift;
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.juve.payroll.web.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class DTRController {
+	
+	@Autowired IGenericPayrollService<>
+	
+	@RequestMapping("/dtr")
+	public ModelAndView welcomePage() {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.addObject("dailyTimeRecord", attributeValue)
+		return new ModelAndView("dtrpage", "message", message);
+	}
+	
+}

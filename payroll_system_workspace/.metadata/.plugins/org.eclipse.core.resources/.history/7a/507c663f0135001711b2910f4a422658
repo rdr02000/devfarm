@@ -1,0 +1,92 @@
+package payrollJPA;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the client_offered_allowance database table.
+ * 
+ */
+@Entity
+@Table(name="client_offered_allowance")
+@NamedQuery(name="ClientOfferedAllowance.findAll", query="SELECT c FROM ClientOfferedAllowance c")
+public class ClientOfferedAllowance implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
+
+	@Column(name="bonus_and_allowance_id")
+	private int bonusAndAllowanceId;
+
+	@Column(name="client_id")
+	private int clientId;
+
+	//bi-directional one-to-one association to BonusAndAllowance
+	@OneToOne
+	@JoinColumn(name="id")
+	private BonusAndAllowance bonusAndAllowance;
+
+	//bi-directional one-to-one association to Client
+	@OneToOne
+	@JoinColumn(name="id")
+	private Client client;
+
+	//bi-directional one-to-one association to EmployeeAllowance
+	@OneToOne(mappedBy="clientOfferedAllowanceBean")
+	private EmployeeAllowance employeeAllowance;
+
+	public ClientOfferedAllowance() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getBonusAndAllowanceId() {
+		return this.bonusAndAllowanceId;
+	}
+
+	public void setBonusAndAllowanceId(int bonusAndAllowanceId) {
+		this.bonusAndAllowanceId = bonusAndAllowanceId;
+	}
+
+	public int getClientId() {
+		return this.clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public BonusAndAllowance getBonusAndAllowance() {
+		return this.bonusAndAllowance;
+	}
+
+	public void setBonusAndAllowance(BonusAndAllowance bonusAndAllowance) {
+		this.bonusAndAllowance = bonusAndAllowance;
+	}
+
+	public Client getClient() {
+		return this.client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public EmployeeAllowance getEmployeeAllowance() {
+		return this.employeeAllowance;
+	}
+
+	public void setEmployeeAllowance(EmployeeAllowance employeeAllowance) {
+		this.employeeAllowance = employeeAllowance;
+	}
+
+}

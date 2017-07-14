@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;com.juve.payroll.data.dao.impl.EmployeeOverRecordDAO&apos; to &apos;EmployeeOvertimeRecordDAO&apos;&#x0D;&#x0A;- Original project: &apos;payrolldata&apos;&#x0D;&#x0A;- Original element: &apos;com.juve.payroll.data.dao.impl.EmployeeOverRecordDAO&apos;&#x0D;&#x0A;- Renamed element: &apos;com.juve.payroll.data.dao.impl.EmployeeOvertimeRecordDAO&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;EmployeeOverRecordDAO&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java&lt;com.juve.payroll.data.dao.impl{EmployeeOverRecordDAO.java[EmployeeOverRecordDAO" matchStrategy="1" name="EmployeeOvertimeRecordDAO" qualified="false" references="true" similarDeclarations="false" stamp="1496408415126" textual="false" version="1.0"/>
+</session>

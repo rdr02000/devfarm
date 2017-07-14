@@ -1,0 +1,81 @@
+package model;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import java.util.Date;
+
+
+/**
+ * The persistent class for the employee_leave database table.
+ * 
+ */
+@Entity
+@Table(name="employee_leave")
+@NamedQuery(name="EmployeeLeave.findAll", query="SELECT e FROM EmployeeLeave e")
+public class EmployeeLeave implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="rendered_date")
+	private Date renderedDate;
+
+	@Column(name="rendered_hours")
+	private int renderedHours;
+
+	//bi-directional many-to-one association to Employee
+	@ManyToOne(fetch=FetchType.LAZY)
+	private Employee employee;
+
+	//bi-directional many-to-one association to Leave
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="leave_type")
+	private Leave leave;
+
+	public EmployeeLeave() {
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Date getRenderedDate() {
+		return this.renderedDate;
+	}
+
+	public void setRenderedDate(Date renderedDate) {
+		this.renderedDate = renderedDate;
+	}
+
+	public int getRenderedHours() {
+		return this.renderedHours;
+	}
+
+	public void setRenderedHours(int renderedHours) {
+		this.renderedHours = renderedHours;
+	}
+
+	public Employee getEmployee() {
+		return this.employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Leave getLeave() {
+		return this.leave;
+	}
+
+	public void setLeave(Leave leave) {
+		this.leave = leave;
+	}
+
+}

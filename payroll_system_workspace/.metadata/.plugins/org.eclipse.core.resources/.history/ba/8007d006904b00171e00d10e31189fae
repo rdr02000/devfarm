@@ -1,0 +1,67 @@
+package com.juve.payroll.service.impl;
+
+import java.sql.Date;
+import java.util.Calendar;
+
+import com.juve.payroll.model.Employee;
+import com.juve.payroll.model.EmployeeShift;
+import com.juve.payroll.model.TimeRecord;
+import com.juve.payroll.service.IGenericPayrollService;
+import com.juve.payroll.service.ITimeRecordUtilityService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class TimeRecordUtilityService implements ITimeRecordUtilityService {
+	
+	@Autowired
+	private IGenericPayrollService<Employee> employeeService;
+	@Autowired
+	private IGenericPayrollService<TimeRecord> timeRecordService;
+
+	public int getUndertime(Long timeRecordId) {
+		TimeRecord timeRecord = timeRecordService.findOne(timeRecordId);
+		Employee employee = timeRecord.getEmployee();
+		EmployeeShift shift = employee.getEmployeeShift();
+		
+		long hour = timeRecord.getTimeIn().getHours();
+		String shiftHour = shift.getScheduleShift().getShiftRule();
+		
+		
+		System.out.println(getHour(shiftHour));
+		
+		return 0;
+	}
+
+	public int getUndertime(Long employeeId, Date timeIn, Date timeOut) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getLate(Long timeRecordId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getLate(Long employeeId, Date timeIn, Date timeOut) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	private int getHour(String shiftTime) {
+		int h = 0;
+		if (shiftTime.contains("-")) {
+			String[] timeStr = shiftTime.split("-");
+			
+			h = Integer.parseInt(timeStr[0].substring(0, 2));
+			System.out.println("-" + h);
+		} else {
+			h = Integer.parseInt(shiftTime);
+			System.out.println(h);
+		}
+		
+		return h;
+		
+	}
+}

@@ -1,0 +1,278 @@
+package com.juve.payroll.employeews.controller;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.juve.payroll.employeews.form.EmployeeLeaveDetails;
+import com.juve.payroll.employeews.form.EmployeeLeaveSaveForm;
+import com.juve.payroll.employeews.form.EmployeeTimeRecord;
+import com.juve.payroll.employeews.form.EmployeeTimeRecordDetail;
+import com.juve.payroll.employeews.form.Overtime;
+import com.juve.payroll.employeews.form.OvertimeDetails;
+import com.juve.payroll.employeews.form.OvertimeSaveForm;
+import com.juve.payroll.model.Employee;
+import com.juve.payroll.model.EmployeeLeave;
+import com.juve.payroll.model.Leave;
+import com.juve.payroll.model.OvertimeRecord;
+import com.juve.payroll.model.TimeRecord;
+import com.juve.payroll.service.IEmployeeLeaveService;
+import com.juve.payroll.service.IEmployeeService;
+import com.juve.payroll.service.IEmployeeTimeRecordService;
+import com.juve.payroll.service.IGenericPayrollService;
+import com.juve.payroll.service.IOvertimeRecordService;
+import com.juve.payroll.util.TimeRecordUtilityService;
+
+@RestController
+public class EmployeeController {
+	@Autowired 
+	private IGenericPayrollService<TimeRecord> employeeTimeRecordService;
+	@Autowired
+	private IGenericPayrollService<Employee> employeeService;
+	@Autowired
+	private IGenericPayrollService<EmployeeLeave> employeeLeaveService;
+	@Autowired
+	private IGenericPayrollService<Leave> leaveService;
+	@Autowired
+	private IGenericPayrollService<OvertimeRecord> overtimeRecordService;
+	
+	@RequestMapping(value = "/employee/leave", 
+			method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<EmployeeLeaveDetails> saveEmployeeLeave(@RequestBody EmployeeLeaveSaveForm employeeLeaveSaveForm) {
+		Leave leave = leaveService.findOne(employeeLeaveSaveForm.getLeaveType());
+		Employee employee = employeeService.findOne(employeeLeaveSaveForm.getEmployeeId());
+		
+		EmployeeLeave employeeLeave = new EmployeeLeave();
+		employeeLeave.setDescription(employeeLeaveSaveForm.getDescription());
+		employeeLeave.setEmployee(employee);
+		employeeLeave.setLeave(leave);
+		employeeLeave.setRenderedDate(employeeLeaveSaveForm.getRenderedDate().getTime());
+		employeeLeave.setRenderedHours(employeeLeaveSaveForm.getRenderedHour());
+		employeeLeave.setStatus("pending");
+		
+		employeeLeaveService.create(employeeLeave);
+		
+		EmployeeLeaveDetails details = new EmployeeLeaveDetails();
+		details.setDescription(employeeLeave.getDescription());
+		details.setEmployeeId(employee.getEmployeeId());
+		details.setFirstName(employee.getFirstName());
+		details.setLastName(employee.getLastName());
+		details.setLeaveType(leave.getLeaveName());
+		
+		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+		
+		details.setRenderedDate(df.format(employeeLeave.getRenderedDate()));
+		details.setRenderedHour(employeeLeave.getRenderedHours());
+		details.setStatus(employeeLeave.getStatus());
+		
+		return new ResponseEntity<EmployeeLeaveDetails>(details, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/leave/approve", 
+			method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<EmployeeLeaveDetails> approveLeave(@RequestBody EmployeeLeaveSaveForm employeeLeaveSaveForm) {
+		EmployeeLeave leave = employeeLeaveService.findOne(employeeLeaveSaveForm.getId());
+		leave.setStatus(employeeLeaveSaveForm.getStatus());
+		
+		employeeLeaveService.update(leave);
+		
+		employeeLeaveSaveForm.setStatus(leave.getStatus());
+		
+		EmployeeLeaveDetails details = new EmployeeLeaveDetails();
+		details.setDescription(leave.getDescription());
+		details.setEmployeeId(leave.getEmployee().getEmployeeId());
+		details.setFirstName(leave.getEmployee().getFirstName());
+		details.setLastName(leave.getEmployee().getLastName());
+		details.setLeaveType(leave.getLeave().getLeaveName());
+		
+		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+		
+		details.setRenderedDate(df.format(leave.getRenderedDate()));
+		details.setRenderedHour(leave.getRenderedHours());
+		details.setStatus(leave.getStatus());
+		
+		return new ResponseEntity<EmployeeLeaveDetails>(details, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/employee/leaves/pendingapproval/{reportingEmployee}/{from}/{to}", 
+			method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<List<EmployeeLeaveDetails>> getReporteesLeave(@PathVariable("reportingEmployee")Long id,
+			@PathVariable("from") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date from, 
+			@PathVariable("to") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date  to) {
+		
+		List<EmployeeLeave> list = ((IEmployeeLeaveService)employeeLeaveService).getEmployeeLeaveByReportingEmployee(id);
+		List<EmployeeLeaveDetails> leaveDetails = new ArrayList<EmployeeLeaveDetails>();
+		
+		for (EmployeeLeave leave : list) {
+			if ((leave.getRenderedDate().equals(from) || leave.getRenderedDate().after(from)) &&
+				(leave.getRenderedDate().equals(to) || leave.getRenderedDate().before(to))) {
+				
+				EmployeeLeaveDetails detail = new EmployeeLeaveDetails();
+				detail.setDescription(leave.getDescription());
+				detail.setEmployeeId(leave.getEmployee().getEmployeeId());
+				detail.setFirstName(leave.getEmployee().getFirstName());
+				detail.setLastName(leave.getEmployee().getLastName());
+				detail.setLeaveType(leave.getLeave().getLeaveName());
+				
+				SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+				
+				detail.setRenderedDate(df.format(leave.getRenderedDate()));
+				detail.setRenderedHour(leave.getRenderedHours());
+				detail.setStatus(leave.getStatus());
+				
+				leaveDetails.add(detail);
+			}
+		}
+		
+		return new ResponseEntity<List<EmployeeLeaveDetails>>(leaveDetails, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/employee/leaves/{employeeId}/{from}/{to}", 
+			method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<List<EmployeeLeaveDetails>> getEmployeeLeaves(@PathVariable("employeeId") Long employeeId,
+			@PathVariable("from") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date from, 
+			@PathVariable("to") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date  to) {
+		
+		List<EmployeeLeave> list = ((IEmployeeLeaveService)employeeLeaveService).getEmployeeLeave(employeeId, from, to);
+		List<EmployeeLeaveDetails> leaveDetails = new ArrayList<EmployeeLeaveDetails>();
+		
+		Employee employee = ((IEmployeeService)employeeService).findOne(employeeId);
+		
+		for (EmployeeLeave employeeLeave : list) {
+			EmployeeLeaveDetails details = new EmployeeLeaveDetails();
+			
+			details.setEmployeeId(employee.getEmployeeId());
+			details.setFirstName(employee.getFirstName());
+			details.setLastName(employee.getLastName());
+			details.setLeaveType(employeeLeave.getLeave().getLeaveName());
+			
+			SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+		
+			details.setRenderedDate(df.format(employeeLeave.getRenderedDate()));
+			details.setRenderedHour(employeeLeave.getRenderedHours());
+			details.setStatus(employeeLeave.getStatus());
+			details.setDescription(employeeLeave.getDescription());
+			
+			leaveDetails.add(details);
+		}
+		
+		return new ResponseEntity<List<EmployeeLeaveDetails>>(leaveDetails, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/timerecords/{employeeId}/{from}/{to}", 
+			method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<EmployeeTimeRecordDetail> getEmployeeTimeRecord(@PathVariable("employeeId") Long employeeId,
+			@PathVariable("from") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date from, 
+			@PathVariable("to") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date  to) {
+		
+		List<TimeRecord> list = ((IEmployeeTimeRecordService)employeeTimeRecordService).getEmployeeTimeRecord(employeeId, from, to);
+		List<EmployeeTimeRecord> timeRecordDetails = new ArrayList<EmployeeTimeRecord>();
+		
+		Employee employee = ((IEmployeeService)employeeService).findOne(employeeId);
+		
+		for (TimeRecord timeRecord : list) {
+			EmployeeTimeRecord timeRecordDetail = new EmployeeTimeRecord();
+			SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd HH:mm", Locale.getDefault());
+			
+			timeRecordDetail.setTimeIn(df.format(timeRecord.getTimeIn()));
+			timeRecordDetail.setTimeOut(df.format(timeRecord.getTimeOut()));
+			
+			timeRecordDetail.setLate(TimeRecordUtilityService.getLate(employee, timeRecord));
+			timeRecordDetail.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, timeRecord));
+			
+			timeRecordDetails.add(timeRecordDetail);		
+		}
+		
+		EmployeeTimeRecordDetail employeeTimeRecordDetailList = new EmployeeTimeRecordDetail();
+		employeeTimeRecordDetailList.setEmployeeId(employee.getEmployeeId());
+		employeeTimeRecordDetailList.setFirstName(employee.getFirstName());
+		employeeTimeRecordDetailList.setLastName(employee.getLastName());
+		employeeTimeRecordDetailList.setEmployeeTimeRecordList(timeRecordDetails);
+		employeeTimeRecordDetailList.setAbsences(TimeRecordUtilityService.getAbsences(employee, list));
+		employeeTimeRecordDetailList.setLate(TimeRecordUtilityService.getLate(employee, list));
+		employeeTimeRecordDetailList.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, list));
+		
+		return new ResponseEntity<EmployeeTimeRecordDetail>(employeeTimeRecordDetailList, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/overtime", 
+			method = RequestMethod.POST,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<OvertimeDetails> saveOvertime(@RequestBody OvertimeSaveForm overtimeSaveForm) {
+		Employee employee = employeeService.findOne(overtimeSaveForm.getEmployeeId());
+		OvertimeRecord overtime = new OvertimeRecord();
+		overtime.setEmployee(employee);
+		overtime.setDescription(overtimeSaveForm.getDescription());
+		overtime.setStatus(overtimeSaveForm.getStatus());
+		overtime.setDateRendered(overtimeSaveForm.getDateRendered().getTime());
+		overtime.setRenderedHour(overtimeSaveForm.getRenderedHour());
+		overtimeRecordService.create(overtime);
+		
+		OvertimeDetails details = new OvertimeDetails();
+		details.setId(overtime.getId());
+		
+		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+		details.setEmployeeId(employee.getEmployeeId());
+		details.setFirstName(employee.getFirstName());
+		details.setLastName(employee.getLastName());
+		List<Overtime> overtimeList = new ArrayList<Overtime>();
+		details.setOvertimeList(overtimeList);
+		return new ResponseEntity<OvertimeDetails>(details, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/overtime/{employeeId}/{from}/{to}", 
+			method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<OvertimeDetails> getOvertimeDetails(@PathVariable("employeeId") Long employeeId,
+			@PathVariable("from") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date from, 
+			@PathVariable("to") @DateTimeFormat(pattern="MMddyyyyHHmmss") Date  to) {
+		
+		List<OvertimeRecord> overTimeRecordList = ((IOvertimeRecordService)overtimeRecordService).getOvertimes(employeeId, from, to);
+		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
+		Employee employee = employeeService.findOne(employeeId);
+		
+		OvertimeDetails overTimeDetailsList = new OvertimeDetails();
+		
+		List<Overtime> overtimeList = new LinkedList<Overtime>();
+		
+		System.out.println("overtime size " + overTimeRecordList.size());
+		
+		for(OvertimeRecord overtimeRecord : overTimeRecordList) {
+			Overtime overtime = new Overtime();
+			overtime.setDateRendered(df.format(overtimeRecord.getDateRendered()));
+			overtime.setDescription(overtimeRecord.getDescription());
+			overtime.setRenderedHour(overtimeRecord.getRenderedHour());
+			overtime.setStatus(overtimeRecord.getStatus());
+			
+			overtimeList.add(overtime);
+		}
+		 
+		overTimeDetailsList.setEmployeeId(employee.getEmployeeId());
+		overTimeDetailsList.setId(employee.getId());
+		overTimeDetailsList.setFirstName(employee.getFirstName());
+		overTimeDetailsList.setLastName(employee.getLastName());
+		overTimeDetailsList.setOvertimeList(overtimeList);
+		
+		return new ResponseEntity<OvertimeDetails>(overTimeDetailsList, HttpStatus.OK);
+	}
+}

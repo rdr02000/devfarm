@@ -1,0 +1,78 @@
+package com.juve.payroll.data.dao.test;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+
+
+
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.juve.payroll.data.config.PayrollJPAConfig;
+
+
+import com.juve.payroll.data.dao.IEmployeeLeaveDAO;
+import com.juve.payroll.data.dao.IPayrollGenericDAO;
+import com.juve.payroll.data.dao.ITimeRecordDAO;
+import com.juve.payroll.data.dao.IBonusAndAllowanceDAO;
+
+
+import com.juve.payroll.data.dao.impl.AbstractPayrollDAO;
+import com.juve.payroll.data.dao.impl.BonusAndAllowanceDAO;
+import com.juve.payroll.model.BonusAndAllowance;
+import com.juve.payroll.model.EmployeeLeave;
+import com.juve.payroll.model.TimeRecord;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=PayrollJPAConfig.class)
+public class DAOTest {
+	
+	
+	@Autowired
+	private IPayrollGenericDAO<TimeRecord> timeRecordDAO;
+	
+	@Autowired
+	private IPayrollGenericDAO<EmployeeLeave> employeeLeaveDAO;
+	
+	@Autowired
+	private IPayrollGenericDAO<BonusAndAllowance> bonusAndAllowanceDAO;
+	
+
+	@Test
+	public void testTimeRecord() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		
+		List<TimeRecord> timeRecord = ((ITimeRecordDAO)timeRecordDAO).getEmployeeTimeRecord(1L,  sdf.parse("2017-05-01 08:00:00"),
+				 sdf.parse("2017-05-04 17:00:00"));
+		
+		System.out.println("time record " + timeRecord.size());
+	}
+	
+	@Test
+	public void testEmployeeLeave() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		List<EmployeeLeave> employeeLeaves = ((IEmployeeLeaveDAO)employeeLeaveDAO).getEmployeesLeave(1l, sdf.parse("2017-05-01"),
+				 sdf.parse("2017-05-04"));
+		
+		System.out.println("employeeLeave " + employeeLeaves.size());
+	}
+	
+	@Test
+	public void testBonusAndAllowance() {
+		
+		((AbstractPayrollDAO)bonusAndAllowanceDAO).setClazz(BonusAndAllowanceDAO.class);
+		List<BonusAndAllowance> list = ((IBonusAndAllowanceDAO)bonusAndAllowanceDAO).getBonusAndAllowances();
+		
+		System.out.println(list.size());
+	}
+
+}
