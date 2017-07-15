@@ -1,9 +1,13 @@
 package com.juve.payroll.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.juve.payroll.model.Client;
 import com.juve.payroll.model.Employee;
@@ -56,74 +60,161 @@ public class TimeRecordUtilityService {
 		ruleTimeIn.set(Calendar.MINUTE, min);
 		ruleTimeIn.set(Calendar.SECOND, sec);
 		
-		lateTotal = (timeRecord.getTimeIn().getTime() - ruleTimeIn.getTime().getTime());
+		lateTotal = TimeUnit.MILLISECONDS.toMinutes(timeRecord.getTimeIn().getTime() - ruleTimeIn.getTime().getTime());
 		
 		if (lateTotal < 0) {
 			return 0;
 		}
 
-		return (lateTotal/1000)/60;
+		return lateTotal;
 	} 
 	
 	public static long getUnderTime(Employee employee, TimeRecord timeRecord) {
-		int min = 0;
-		int sec = 0;
-		int i = 0;
 		long underTime = 0;
 		
-		String shiftTime = employee.getEmployeeShift().getScheduleShift().getShiftRule();
+		try {
 		
-		Calendar timeIn = Calendar.getInstance();
-		timeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
-		
-		Calendar timeOut = Calendar.getInstance();
-		timeOut.setTime(new Date(timeRecord.getTimeOut().getTime()));
-		
-		Calendar ruledTimeOut = Calendar.getInstance();
-		ruledTimeOut.setTime(new Date(timeRecord.getTimeIn().getTime()));
-		
-		if (shiftTime.contains("-")) {
-			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 9);
-			ruledTimeOut.set(Calendar.MINUTE,timeIn.get(Calendar.MINUTE));
-			ruledTimeOut.set(Calendar.SECOND, timeIn.get(Calendar.SECOND));
-		} else if (shiftTime.contains("|") && i == 0) {
-			System.out.println("Morning in");
-			String[] timeStr = shiftTime.split("\\|");
-			min  = Integer.parseInt(timeStr[0].substring(2,4));
-			sec  = Integer.parseInt(timeStr[0].substring(4,6));
-			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 4);
-			ruledTimeOut.set(Calendar.MINUTE, min);
-			ruledTimeOut.set(Calendar.SECOND, sec);
-			i++;
-		} else if (shiftTime.contains("|") && i == 1) {
-			System.out.println("Afternoon in");
+			String shiftTime = employee.getEmployeeShift().getScheduleShift().getShiftRule();
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 			
-			String[] timeStr = shiftTime.split("\\|");
-			min  = Integer.parseInt(timeStr[1].substring(2,4));
-			sec  = Integer.parseInt(timeStr[1].substring(4,6));
+			Calendar timeIn = Calendar.getInstance();
+			timeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
 			
-			ruledTimeOut.set(Calendar.HOUR_OF_DAY, timeIn.get(Calendar.HOUR_OF_DAY) + 4);
-			ruledTimeOut.set(Calendar.MINUTE, min);
-			ruledTimeOut.set(Calendar.SECOND, sec);
-		} else {
-			min  = Integer.parseInt(shiftTime.substring(2,4));
-			sec  = Integer.parseInt(shiftTime.substring(4,6));
+			Calendar timeOut = Calendar.getInstance();
+			timeOut.setTime(new Date(timeRecord.getTimeOut().getTime()));
 			
-			ruledTimeOut.set(Calendar.HOUR_OF_DAY,  timeIn.get(Calendar.HOUR_OF_DAY) + 9);
-			ruledTimeOut.set(Calendar.MINUTE, min);
-			ruledTimeOut.set(Calendar.SECOND, sec);
-		}
-		
-		underTime = (ruledTimeOut.getTime().getTime() - timeOut.getTime().getTime());
-		
-		if (underTime < 0) {
+			Calendar ruledTimeOut = Calendar.getInstance();
+			ruledTimeOut.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+			
+			if (shiftTime.contains(HYPEN)) {
+				String[] timeStr = shiftTime.split("-");
+				
+				ruledTimeOut.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[1].substring(0, 2)));
+				ruledTimeOut.set(Calendar.MINUTE, Integer.parseInt(timeStr[1].substring(2, 4)));
+				ruledTimeOut.set(Calendar.SECOND, Integer.parseInt(timeStr[1].substring(4, 6)));
+				
+				ruledTimeOut.add(Calendar.HOUR_OF_DAY, 9);
+			} else if (shiftTime.contains(VERTICAL_SIGN)) {
+				String[] timeStr = shiftTime.split("\\|");
+				
+				if (timeIn.get(Calendar.HOUR_OF_DAY) < (Integer.parseInt(timeStr[0].substring(0,2)) + 4)) {
+					ruledTimeOut.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[0].substring(0, 2)));
+					ruledTimeOut.set(Calendar.MINUTE, Integer.parseInt(timeStr[0].substring(2,4)));
+					ruledTimeOut.set(Calendar.SECOND, Integer.parseInt(timeStr[0].substring(4,6)));
+					
+					ruledTimeOut.add(Calendar.HOUR_OF_DAY, 4);
+				} else {
+					ruledTimeOut.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[1].substring(0, 2)));
+					ruledTimeOut.set(Calendar.MINUTE, Integer.parseInt(timeStr[1].substring(2,4)));
+					ruledTimeOut.set(Calendar.SECOND, Integer.parseInt(timeStr[1].substring(4,6)));
+					
+					ruledTimeOut.add(Calendar.HOUR_OF_DAY, 4);
+				}
+			} else {
+				ruledTimeOut.set(Calendar.HOUR_OF_DAY,  Integer.parseInt(shiftTime.substring(0,2)));
+				ruledTimeOut.set(Calendar.MINUTE, Integer.parseInt(shiftTime.substring(2,4)));
+				ruledTimeOut.set(Calendar.SECOND, Integer.parseInt(shiftTime.substring(4,6)));
+				
+				ruledTimeOut.add(Calendar.HOUR_OF_DAY, 9);
+			}
+			
+			underTime = TimeUnit.MILLISECONDS.toMinutes(ruledTimeOut.getTime().getTime() - timeOut.getTime().getTime());
+			
+			if (underTime < 0) {
+				return 0;
+			}
+			
+			return underTime;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			
 			return 0;
 		}
-		
-		return (underTime/1000)/60;
 	}
 	
-	public static long getUnderTime(Employee employee, List<TimeRecord> timeRecordList ) {
+	public static long getNightShift(Employee employee, TimeRecord timeRecord) {
+		long nightShiftMin = 0;
+		
+		if (!employee.getEmployeeShift().getScheduleShift().getShiftName().equals("NightShift")) {
+			return nightShiftMin;
+		}
+		
+		try {
+			String shiftTime = employee.getEmployeeShift().getScheduleShift().getShiftRule();
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			
+			Calendar timeIn = Calendar.getInstance();
+			timeIn.setTime(new Date(timeRecord.getTimeIn().getTime()));
+			
+			Calendar timeOut = Calendar.getInstance();
+			timeOut.setTime(new Date(timeRecord.getTimeOut().getTime()));
+			
+			Calendar ruledTimeIn = Calendar.getInstance();
+			ruledTimeIn.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+			
+			Calendar ruledTimeOut = Calendar.getInstance();
+			ruledTimeOut.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+			
+			nightShiftMin = TimeUnit.MILLISECONDS.toMinutes(Math.abs(timeOut.getTimeInMillis() - timeIn.getTimeInMillis()));
+			
+			if (shiftTime.contains(HYPEN)) {
+				String[] timeStr = shiftTime.split("-");
+				
+				Calendar ruledTimeInStart = Calendar.getInstance();
+				ruledTimeInStart.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+				ruledTimeInStart.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[0].substring(0, 2)));
+				ruledTimeInStart.set(Calendar.MINUTE, Integer.parseInt(timeStr[0].substring(2, 4)));
+				ruledTimeInStart.set(Calendar.SECOND, Integer.parseInt(timeStr[0].substring(4, 6)));
+		
+				if (timeIn.before(ruledTimeInStart)) {
+					nightShiftMin -= TimeUnit.MILLISECONDS.toMinutes((Math.abs(ruledTimeInStart.getTimeInMillis() - timeIn.getTimeInMillis())));
+				}
+			} else if (shiftTime.contains(VERTICAL_SIGN)) {
+				String[] timeStr = shiftTime.split("\\|");
+				Calendar ruledTimeInStart = Calendar.getInstance();
+				
+				if (timeIn.get(Calendar.HOUR_OF_DAY) < (Integer.parseInt(timeStr[0].substring(0,2)) + 4)) {
+					ruledTimeInStart.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+					ruledTimeInStart.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[0].substring(0, 2)));
+					ruledTimeInStart.set(Calendar.MINUTE, Integer.parseInt(timeStr[0].substring(2, 4)));
+					ruledTimeInStart.set(Calendar.SECOND, Integer.parseInt(timeStr[0].substring(4, 6)));
+						
+					if (timeIn.before(ruledTimeInStart)) {
+						nightShiftMin -= TimeUnit.MILLISECONDS.toMinutes((Math.abs(ruledTimeInStart.getTimeInMillis() - timeIn.getTimeInMillis())));
+					}
+				} else {
+					ruledTimeInStart.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+					ruledTimeInStart.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeStr[1].substring(0, 2)));
+					ruledTimeInStart.set(Calendar.MINUTE, Integer.parseInt(timeStr[1].substring(2, 4)));
+					ruledTimeInStart.set(Calendar.SECOND, Integer.parseInt(timeStr[1].substring(4, 6)));
+						
+					if (timeIn.before(ruledTimeInStart)) {
+						nightShiftMin -= TimeUnit.MILLISECONDS.toMinutes((Math.abs(ruledTimeInStart.getTimeInMillis() - timeIn.getTimeInMillis())));
+					}
+				}
+			} else {
+				
+				Calendar ruledTimeInStart = Calendar.getInstance();
+				ruledTimeInStart.setTime(formatter.parse(formatter.format(new Date(timeRecord.getTimeIn().getTime()))));
+				ruledTimeInStart.set(Calendar.HOUR_OF_DAY, Integer.parseInt(shiftTime.substring(0, 2)));
+				ruledTimeInStart.set(Calendar.MINUTE, Integer.parseInt(shiftTime.substring(2, 4)));
+				ruledTimeInStart.set(Calendar.SECOND, Integer.parseInt(shiftTime.substring(4, 6)));
+		
+				if (timeIn.before(ruledTimeInStart)) {
+					nightShiftMin -= TimeUnit.MILLISECONDS.toMinutes((Math.abs(ruledTimeInStart.getTimeInMillis() - timeIn.getTimeInMillis())));
+				}
+			}
+			
+			return nightShiftMin;
+		
+		} catch(ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	public static long getUnderTime(Employee employee, List<TimeRecord> timeRecordList) {
 		long underTime = 0;
 		
 		for (TimeRecord timeRecord : timeRecordList) {
@@ -142,6 +233,18 @@ public class TimeRecordUtilityService {
 		
 		return lateTotal;
 	}
+	
+	public static long getNightShift(Employee employee, List<TimeRecord> timeRecordList) {
+		long nightShift = 0;
+		
+		if (employee.getEmployeeShift().getScheduleShift().getShiftName().equals("NightShift")) {
+			for (TimeRecord timeRecord : timeRecordList) {
+				nightShift += TimeRecordUtilityService.getNightShift(employee, timeRecord);
+			}
+		}
+		
+		return nightShift;
+	}
 
 	public static int getAbsences(Employee employee, List<TimeRecord> timeRecords) {
 		EmployeeShift shift = employee.getEmployeeShift();
@@ -159,13 +262,13 @@ public class TimeRecordUtilityService {
 			requiredTimeInNumberOfLogin = 4*workDays.size();	
 		}
 		
-		if (scheduleShift.getShiftRule().contains("|")) {
+		if (scheduleShift.getShiftRule().contains(VERTICAL_SIGN)) {
 			requiredTimeInNumberOfLogin = 2*requiredTimeInNumberOfLogin;
 		}
 		
 		int missedTimeIn = requiredTimeInNumberOfLogin - timeRecords.size();
 		
-		if (scheduleShift.getShiftRule().contains("|")) {
+		if (scheduleShift.getShiftRule().contains(VERTICAL_SIGN)) {
 			missedTimeIn /= 2;
 		}
 		

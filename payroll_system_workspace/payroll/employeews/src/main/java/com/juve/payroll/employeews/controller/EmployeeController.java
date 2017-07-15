@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.juve.payroll.employeews.form.Allowance;
+import com.juve.payroll.employeews.form.AllowanceDetails;
 import com.juve.payroll.employeews.form.EmployeeLeaveDetails;
 import com.juve.payroll.employeews.form.EmployeeLeaveSaveForm;
 import com.juve.payroll.employeews.form.EmployeeTimeRecord;
@@ -25,11 +27,14 @@ import com.juve.payroll.employeews.form.EmployeeTimeRecordDetail;
 import com.juve.payroll.employeews.form.Overtime;
 import com.juve.payroll.employeews.form.OvertimeDetails;
 import com.juve.payroll.employeews.form.OvertimeSaveForm;
+import com.juve.payroll.model.BonusAndAllowance;
 import com.juve.payroll.model.Employee;
+import com.juve.payroll.model.EmployeeAllowance;
 import com.juve.payroll.model.EmployeeLeave;
 import com.juve.payroll.model.Leave;
 import com.juve.payroll.model.OvertimeRecord;
 import com.juve.payroll.model.TimeRecord;
+import com.juve.payroll.service.IEmployeeAllowance;
 import com.juve.payroll.service.IEmployeeLeaveService;
 import com.juve.payroll.service.IEmployeeService;
 import com.juve.payroll.service.IEmployeeTimeRecordService;
@@ -49,6 +54,8 @@ public class EmployeeController {
 	private IGenericPayrollService<Leave> leaveService;
 	@Autowired
 	private IGenericPayrollService<OvertimeRecord> overtimeRecordService;
+	@Autowired
+	private IGenericPayrollService<EmployeeAllowance> employeeBonusAndAllowance;
 	
 	@RequestMapping(value = "/employee/leave", 
 			method = RequestMethod.POST,
@@ -199,6 +206,7 @@ public class EmployeeController {
 			
 			timeRecordDetail.setLate(TimeRecordUtilityService.getLate(employee, timeRecord));
 			timeRecordDetail.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, timeRecord));
+			timeRecordDetail.setNightShiftTime(TimeRecordUtilityService.getNightShift(employee, timeRecord));
 			
 			timeRecordDetails.add(timeRecordDetail);		
 		}
@@ -211,6 +219,7 @@ public class EmployeeController {
 		employeeTimeRecordDetailList.setAbsences(TimeRecordUtilityService.getAbsences(employee, list));
 		employeeTimeRecordDetailList.setLate(TimeRecordUtilityService.getLate(employee, list));
 		employeeTimeRecordDetailList.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, list));
+		employeeTimeRecordDetailList.setNightShift(TimeRecordUtilityService.getNightShift(employee, list));
 		
 		return new ResponseEntity<EmployeeTimeRecordDetail>(employeeTimeRecordDetailList, HttpStatus.OK);
 	}
@@ -230,13 +239,13 @@ public class EmployeeController {
 		
 		OvertimeDetails details = new OvertimeDetails();
 		details.setId(overtime.getId());
-		
-		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
 		details.setEmployeeId(employee.getEmployeeId());
 		details.setFirstName(employee.getFirstName());
 		details.setLastName(employee.getLastName());
+		
 		List<Overtime> overtimeList = new ArrayList<Overtime>();
 		details.setOvertimeList(overtimeList);
+		
 		return new ResponseEntity<OvertimeDetails>(details, HttpStatus.OK);
 	}
 	
@@ -255,8 +264,6 @@ public class EmployeeController {
 		
 		List<Overtime> overtimeList = new LinkedList<Overtime>();
 		
-		System.out.println("overtime size " + overTimeRecordList.size());
-		
 		for(OvertimeRecord overtimeRecord : overTimeRecordList) {
 			Overtime overtime = new Overtime();
 			overtime.setDateRendered(df.format(overtimeRecord.getDateRendered()));
@@ -274,5 +281,31 @@ public class EmployeeController {
 		overTimeDetailsList.setOvertimeList(overtimeList);
 		
 		return new ResponseEntity<OvertimeDetails>(overTimeDetailsList, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/employee/allowances/{employeeId}", 
+			method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<AllowanceDetails> getAllowanceDetails(@PathVariable("employeeId") Long employeeId){
+		List<EmployeeAllowance> list = ((IEmployeeAllowance)employeeBonusAndAllowance).getEmployeeAllowance(employeeId);
+		Employee employee = employeeService.findOne(employeeId);
+		AllowanceDetails allowanceDetails = new AllowanceDetails();
+		List<Allowance> allowanceList = new ArrayList<Allowance>();
+		
+		for(EmployeeAllowance employeeAllowance : list) {
+			Allowance allowance = new Allowance();
+			allowance.setAmount(employeeAllowance.getClientOfferedAllowanceBean().getBonusAndAllowance().getBonusAmount());
+			allowance.setBonusName(employeeAllowance.getClientOfferedAllowanceBean().getBonusAndAllowance().getBonusName());
+			
+			allowanceList.add(allowance);
+		}
+		
+		allowanceDetails.setAllowanceList(allowanceList);
+		allowanceDetails.setEmployeeId(employee.getId());
+		allowanceDetails.setFirstName(employee.getFirstName());
+		allowanceDetails.setLastName(employee.getLastName());
+		
+		return new ResponseEntity<AllowanceDetails>(allowanceDetails, HttpStatus.OK);
+		
 	}
 }

@@ -122,8 +122,7 @@
 		                            	<button type="button" class="dtr-event btn btn-primary btn-sm" data-toggle="modal" data-target="#dtr-modal">Time Record</button>
 		                            	<button type="button" class="leave-event btn btn-primary btn-sm" data-toggle="modal" data-target="#leave-modal">Leaves</button>
 		                            	<button type="button" class="overtime-event btn btn-primary btn-sm" data-toggle="modal" data-target="#overtime-modal">Overtimes</button>
-										<button type="button" class="dtr-event btn btn-primary btn-sm" data-toggle="modal" data-target="#dtr-modal">Night Shift</button>
-		                            	<button type="button" class="dtr-event btn btn-primary btn-sm" data-toggle="modal" data-target="#dtr-modal">Allowance</button>
+										<button type="button" class="dtr-event btn btn-primary btn-sm" data-toggle="modal" data-target="#dtr-modal">Allowance</button>
 		                            	<button type="button" class="dtr-event btn btn-primary btn-sm" data-toggle="modal" data-target="#dtr-modal">Adjustment</button>
 		                            </td>
 		                        </tr>

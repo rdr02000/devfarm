@@ -2,7 +2,6 @@ var DtrModal = (function($) {
 	var _table = null
 	var _modalBtn= null
 	var _dataTable = null;
-	var _this = this;
 	
 	var _init = function(table, modalBtn) {
 		_table = $(table);
@@ -11,31 +10,40 @@ var DtrModal = (function($) {
 	}
 	
 	var _bindEvent =function() {
-		_modalBtn.on("click",_clickEvent);
-	}
-	
-	var _getDataTable = function() {
-		return _dataTable;
-	}
-	
-	var _getModalBtn = function() {
-		return _modalBtn;
-	}
-	
-	var _getTable = function() {
-		return _table;
+		_modalBtn.on("click",_modalBtnClickEvent);
+		$("#add-button").on("click",_addEmptyRowClickEvent);
+		$("#remove-dtr1").on("click",_removeRowClickEvent);
 	}
 	
 	var _reRenderTable = function() {
 		$("#dtr-modal").find("tr td input.payroll-textfield").css("width","70px")
 		$("#dtr-modal").find(".modal-sm").css("width","1150px");
 		$("#dtr-table-id").css("width","100%");
+	
 		_dataTable.columns.adjust().draw();
+	}
+	
+	var _addEmptyRowClickEvent = function(event){
+		var countRow = 0;
+		
+		_table.find("tr").each(function(){
+			countRow++;
+		})
+		
+		_addTableData(_dataTable, countRow, {})
+		_reRenderTable();
+	}
+	
+	var _removeRowClickEvent = function(event) {
+		console.log("this will be remove");
+		_dataTable.row(event.target).remove();
+		
+		_reRenderTable();
 	}
 	
 	var _addTableData = function(dataTable,index,obj) {
 		dataTable.row.add([
-			"<input type='text' class='form-control date' id='datetimepicker" + index + "1' value='" + obj.timeIn + "'/> " +
+			"<input type='text' class='form-control date' id='datetimepicker" + index + "1' value='" + ($.isEmptyObject(obj)? "": obj.timeIn) + "'/> " +
 			"<script>" +
 				"$('#datetimepicker" + index + "1').datetimepicker({" + 
 						"format:  'YYYY-MM-DD HH:mm'," +
@@ -57,7 +65,7 @@ var DtrModal = (function($) {
 					"});" +
 			"<\/script>",
 			
-			"<input type='text' class='form-control date' id='datetimepicker" + index + "2' value='" + obj.timeOut + "'/> " +
+			"<input type='text' class='form-control date' id='datetimepicker" + index + "2' value='" + ($.isEmptyObject(obj)? "": obj.timeOut) + "'/> " +
 			"<script>" +
 				"$('#datetimepicker" + index + "2').datetimepicker({" + 
 					"format:  'YYYY-MM-DD HH:mm'," +
@@ -79,13 +87,14 @@ var DtrModal = (function($) {
 				"});" +
 			"<\/script>",
 
-			"<input type='text' class='payroll-textfield form-control' value='" + obj.late + "'/>",
-			"<input type='text' class='payroll-textfield form-control' value='" + obj.underTime + "'/>",
-			
+			"<input type='text' class='payroll-textfield form-control' value='" + ($.isEmptyObject(obj)?"":obj.late) + "'/>",
+			"<input type='text' class='payroll-textfield form-control' value='" + ($.isEmptyObject(obj)?"":obj.underTime) + "'/>",
+			"<input type='text' class='payroll-textfield form-control' value='" + ($.isEmptyObject(obj)?"":obj.nightShiftTime) + "'/>",
+			"<button type='button' id='remove-dtr" + index + "' class='btn btn-default btn-sm'>Remove</button>"
 		]).draw();
-	} 
+	}
 	
-	var _clickEvent = function(event){
+	var _modalBtnClickEvent = function(event){
 		var id = PayrollWeekDetails.getEmployeeId(event.target);
 		var from = PayrollWeekDetails.getPayrollDateFrom();
 		var to = PayrollWeekDetails.getPayrollDateTo();

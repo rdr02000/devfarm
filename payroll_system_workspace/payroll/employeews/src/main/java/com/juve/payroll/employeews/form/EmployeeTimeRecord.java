@@ -6,6 +6,7 @@ public class EmployeeTimeRecord {
 	private float late;
 	private float underTime;
 	private int absences;
+	private float nightShiftTime;
 	
 	public String getTimeIn() {
 		return timeIn;
@@ -36,5 +37,11 @@ public class EmployeeTimeRecord {
 	}
 	public void setAbsences(int absences) {
 		this.absences = absences;
+	}
+	public float getNightShiftTime() {
+		return nightShiftTime;
+	}
+	public void setNightShiftTime(float nightShiftTime) {
+		this.nightShiftTime = nightShiftTime;
 	}
 }

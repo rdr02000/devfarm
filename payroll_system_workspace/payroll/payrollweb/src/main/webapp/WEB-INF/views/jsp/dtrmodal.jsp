@@ -25,7 +25,8 @@
 	                				<th>Time Out</th>
 	               					<th>Late(in Min)</th>
 	                				<th>Undertime(in Min)</th>
-	                				
+	                				<th>Night Shift(in Min)</th>
+	                				<th>Action</th>
 	            				</tr>
 	        				</thead>
 	        				
@@ -35,6 +36,9 @@
   				</div>
 			</div>
 			<div class="modal-footer">
+				<button id="add-button" type="button" class="btn btn-primary" >
+   					Add
+  				</button>
   				<button type="button" class="btn btn-primary" data-dismiss="modal">
    					Close
   				</button>
