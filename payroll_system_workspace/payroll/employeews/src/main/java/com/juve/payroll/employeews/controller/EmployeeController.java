@@ -199,6 +199,7 @@ public class EmployeeController {
 			
 			timeRecordDetail.setLate(TimeRecordUtilityService.getLate(employee, timeRecord));
 			timeRecordDetail.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, timeRecord));
+			timeRecordDetail.setNightShiftTime(TimeRecordUtilityService.getNightShift(employee, timeRecord));
 			
 			timeRecordDetails.add(timeRecordDetail);		
 		}
@@ -211,6 +212,7 @@ public class EmployeeController {
 		employeeTimeRecordDetailList.setAbsences(TimeRecordUtilityService.getAbsences(employee, list));
 		employeeTimeRecordDetailList.setLate(TimeRecordUtilityService.getLate(employee, list));
 		employeeTimeRecordDetailList.setUnderTime(TimeRecordUtilityService.getUnderTime(employee, list));
+		employeeTimeRecordDetailList.setNightShift(TimeRecordUtilityService.getNightShift(employee, list));
 		
 		return new ResponseEntity<EmployeeTimeRecordDetail>(employeeTimeRecordDetailList, HttpStatus.OK);
 	}
@@ -230,13 +232,13 @@ public class EmployeeController {
 		
 		OvertimeDetails details = new OvertimeDetails();
 		details.setId(overtime.getId());
-		
-		SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy HH:mm:ss", Locale.getDefault());
 		details.setEmployeeId(employee.getEmployeeId());
 		details.setFirstName(employee.getFirstName());
 		details.setLastName(employee.getLastName());
+		
 		List<Overtime> overtimeList = new ArrayList<Overtime>();
 		details.setOvertimeList(overtimeList);
+		
 		return new ResponseEntity<OvertimeDetails>(details, HttpStatus.OK);
 	}
 	

@@ -7,9 +7,10 @@ public class EmployeeTimeRecordDetail {
 	private String firstName;
 	private String lastName;
 	private List<EmployeeTimeRecord> employeeTimeRecordList;
-	private double late;
-	private double underTime;
+	private long late;
+	private long underTime;
 	private int absences;
+	private long nightShift;
 	
 	public List<EmployeeTimeRecord> getEmployeeTimeRecordList() {
 		return employeeTimeRecordList;
@@ -21,13 +22,13 @@ public class EmployeeTimeRecordDetail {
 	public double getLate() {
 		return late;
 	}
-	public void setLate(double late) {
+	public void setLate(long late) {
 		this.late = late;
 	}
 	public double getUnderTime() {
 		return underTime;
 	}
-	public void setUnderTime(double underTime) {
+	public void setUnderTime(long underTime) {
 		this.underTime = underTime;
 	}
 	public int getAbsences() {
@@ -53,5 +54,11 @@ public class EmployeeTimeRecordDetail {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+	public double getNightShift() {
+		return nightShift;
+	}
+	public void setNightShift(long nightShift) {
+		this.nightShift = nightShift;
 	}
 }
