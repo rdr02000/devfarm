@@ -80,7 +80,7 @@
 
 <script>
 	$(document).ready( function() {
- 		DtrModal.init("#dtr-table-id",".dtr-event");
+ 		DtrModal.init("#dtr-table-id",".dtr-event","#dtr-modal");
  		DtrModal.bindEvent();
  		
  		LeaveModal.init("#leave-table-id",".leave-event","#leave-modal");

@@ -1,24 +1,26 @@
 var DtrModal = (function($) {
 	var _table = null
 	var _modalBtn= null
+	var _modal = null;
 	var _dataTable = null;
 	
-	var _init = function(table, modalBtn) {
-		_table = $(table);
-		_modalBtn = $(modalBtn);
-		_dataTable = _table.DataTable({responsive:true});
+	var _init = function(table, modalBtn,modal) {
+		_table = table;
+		_modalBtn = modalBtn;
+		_modal = modal;
+		_dataTable = $(_table).DataTable({responsive:true});
 	}
 	
 	var _bindEvent =function() {
-		_modalBtn.on("click",_modalBtnClickEvent);
+		$(_modalBtn).on("click",_modalBtnClickEvent);
 		$("#add-button").on("click",_addEmptyRowClickEvent);
 		$("#remove-dtr1").on("click",_removeRowClickEvent);
 	}
 	
 	var _reRenderTable = function() {
-		$("#dtr-modal").find("tr td input.payroll-textfield").css("width","70px")
-		$("#dtr-modal").find(".modal-sm").css("width","1150px");
-		$("#dtr-table-id").css("width","100%");
+		$(_modal).find("tr td input.payroll-textfield").css("width","70px")
+		$(_modal).find(".modal-sm").css("width","1150px");
+		$(_table).css("width","100%");
 	
 		_dataTable.columns.adjust().draw();
 	}
@@ -26,7 +28,7 @@ var DtrModal = (function($) {
 	var _addEmptyRowClickEvent = function(event){
 		var countRow = 0;
 		
-		_table.find("tr").each(function(){
+		$(_table).find("tr").each(function(){
 			countRow++;
 		})
 		
@@ -99,8 +101,8 @@ var DtrModal = (function($) {
 		var from = PayrollWeekDetails.getPayrollDateFrom();
 		var to = PayrollWeekDetails.getPayrollDateTo();
 			
-		if(PayrollWeekDetails.isPayrollWeekHasValue(_modalBtn,from, to, event)) {
-			if ($.fn.DataTable.isDataTable("#" + _table.attr("id"))) {
+		if(PayrollWeekDetails.isPayrollWeekHasValue($(_modalBtn),from, to, event)) {
+			if ($.fn.DataTable.isDataTable("#" +$( _table).attr("id"))) {
 				_dataTable.clear();
 				
 				$.ajax({
