@@ -13,7 +13,11 @@ import javax.persistence.*;
 @Table(name="employee_allowance")
 @NamedQueries({
 	@NamedQuery(name="EmployeeAllowance.findAll", query="SELECT e FROM EmployeeAllowance e"),
+<<<<<<< HEAD
 	@NamedQuery(name="EmployeeAllowance.findByEmployee", query="SELECT e FROM EmployeeAllowance e WHERE e.employee.id=:employeeId")
+=======
+	@NamedQuery(name="EmployeeAllowance.findByEmployee", query="SELECT e FROM EmployeeAllowance e WHERE e.employee.id :=employeeId")
+>>>>>>> 52fca8eec3635ab310370236e1c80aca7322d456
 })
 public class EmployeeAllowance implements Serializable {
 	private static final long serialVersionUID = 1L;
