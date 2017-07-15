@@ -13,11 +13,7 @@ import javax.persistence.*;
 @Table(name="employee_allowance")
 @NamedQueries({
 	@NamedQuery(name="EmployeeAllowance.findAll", query="SELECT e FROM EmployeeAllowance e"),
-<<<<<<< HEAD
 	@NamedQuery(name="EmployeeAllowance.findByEmployee", query="SELECT e FROM EmployeeAllowance e WHERE e.employee.id=:employeeId")
-=======
-	@NamedQuery(name="EmployeeAllowance.findByEmployee", query="SELECT e FROM EmployeeAllowance e WHERE e.employee.id :=employeeId")
->>>>>>> 52fca8eec3635ab310370236e1c80aca7322d456
 })
 public class EmployeeAllowance implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,12 +22,10 @@ public class EmployeeAllowance implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 
-	//bi-directional many-to-one association to ClientOfferedAllowance
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="client_offered_allowance")
 	private ClientOfferedAllowance clientOfferedAllowanceBean;
 
-	//bi-directional many-to-one association to Employee
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Employee employee;
 
@@ -61,5 +55,4 @@ public class EmployeeAllowance implements Serializable {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-
 }

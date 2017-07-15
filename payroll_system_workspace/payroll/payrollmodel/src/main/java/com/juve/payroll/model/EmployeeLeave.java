@@ -37,11 +37,9 @@ public class EmployeeLeave implements Serializable {
 	@Column(name="description")
 	private String description;
 
-	//bi-directional many-to-one association to Employee
 	@ManyToOne
 	private Employee employee;
 
-	//bi-directional many-to-one association to Leave
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="leave_type")
 	private Leave leave;
